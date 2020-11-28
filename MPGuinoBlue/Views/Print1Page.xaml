@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:views="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             x:Class="MPGuinoBlue.Views.Print1Page"
+             Title="MPGuino Bluetooth Trip Data"
+             BackgroundColor="#202020"
+             
+             >
+    <ContentPage.Content>
+        <RelativeLayout>
+
+            <Grid  RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+
+                         RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}" >
+                <views:SKCanvasView PaintSurface="OnPainting" />
+            </Grid>
+            
+
+            <Grid VerticalOptions="End"
+                 RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+
+                         RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}"
+>
+                
+            <Button
+                Grid.Row="1" Grid.Column="1" Text="Settings"
+                    IsEnabled="{Binding IsReadyToPrint}"
+                    Margin="3,0,10,8"
+                    BackgroundColor="LightGray"
+                    Command="{Binding SettingCommand}"/>
+            <Button Text="Reset Trip"
+                    IsEnabled="{Binding IsReadyToPrint}"
+                    Margin="10,6,3,2"
+                    BackgroundColor="LightGray"
+                    Command="{Binding TripCommand}"/>
+            <Button 
+                Grid.Column="1" Text="Refill Tank"
+                    IsEnabled="{Binding IsReadyToPrint}"
+                    Margin="3,6,10,2"
+                    BackgroundColor="LightGray"
+                    Command="{Binding TankCommand}"/>
+            <Button Grid.Row="1"
+                Text="Back"
+                    IsEnabled="{Binding IsReadyToPrint}"
+                    Margin="10,0,3,8"
+                    BackgroundColor="LightGray"
+                    Command="{Binding Disconnect}"/>
+
+            </Grid>
+
+        </RelativeLayout>
+    </ContentPage.Content>
+</ContentPage>

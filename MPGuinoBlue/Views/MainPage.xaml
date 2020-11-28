@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MPGuinoBlue.Views.MainPage"
+             Title="MPGuino Bluetooth Select"
+                          BackgroundColor="#202020"
+>
+    <ContentPage.Content>
+        <StackLayout>
+           <Button Text="Scan for Device"
+                   Margin="40"
+                   BackgroundColor="DarkBlue"
+                   Command="{Binding GetDeviceListCommand}">
+                 <Button.Triggers>
+                     <DataTrigger TargetType="Button"
+                                  Binding="{Binding IsScanning}"
+                                  Value="True">
+                          <Setter Property="Text" Value="Stop"/>
+                          <Setter Property="BackgroundColor" Value="IndianRed"/>
+                     </DataTrigger>
+                 </Button.Triggers>
+            </Button>
+
+            <ActivityIndicator IsRunning="{Binding IsScanning}"
+                               IsVisible="{Binding IsScanning}"
+                               HorizontalOptions="Center"
+                               Color="Gray"/>
+ 
+            <ListView ItemsSource="{Binding Peripherals}"
+                      HasUnevenRows="True" 
+                      SelectedItem="{Binding SelectedPeripheral, Mode=TwoWay}">
+                 <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            
+                            <Grid Margin="40,20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Image Source="ic_bluetooth.png"
+                                       WidthRequest="40"
+                                       HeightRequest="40"
+                                       Grid.Row="0"
+                                       Grid.Column="0"
+                                       Grid.RowSpan="2"/>
+
+                                 <Label Text="{Binding Name}"
+                                        FontAttributes="Bold"
+                                        Grid.Column="1"
+                                        TextColor="white"
+                                        Grid.Row="0" />
+
+                                 
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Label 
+                Text="Automatically reconnect when available on start"
+                VerticalOptions="CenterAndExpand" 
+                TextColor="White"
+                HorizontalOptions="CenterAndExpand" />
+            <Switch x:Name="xamlSwitch"
+                
+                IsToggled="{Binding saveflagshow,Mode=TwoWay}"
+                OnColor="DarkBlue"
+                ThumbColor="Gray"
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="CenterAndExpand" />
+            <Label />
+            <Label 
+                Text="Remember last viewed page"
+                VerticalOptions="CenterAndExpand" 
+                TextColor="white"
+                HorizontalOptions="CenterAndExpand" />
+            <Switch x:Name="xamlSwitchScan"
+                               IsToggled="{Binding scanflagshow,Mode=TwoWay}"
+                OnColor="DarkBlue"
+                 
+                ThumbColor="gray"
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="CenterAndExpand" />
+            <Label />
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
