@@ -1,5 +1,5 @@
-﻿using MPGuinoBlue.ViewModels;
-using mpg.Helpers;
+﻿using mpg.Helpers;
+using MPGuinoBlue.ViewModels;
 using Xamarin.Forms;
 
 namespace MPGuinoBlue.Views
@@ -24,8 +24,8 @@ namespace MPGuinoBlue.Views
         void saveswitch(object sender, ToggledEventArgs e)
         {
             Settings.savesaveswitch(e);
-            
-                }
-        
+
+        }
+
     }
 }

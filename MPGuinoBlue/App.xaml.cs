@@ -1,11 +1,9 @@
 ﻿using MPGuinoBlue.Views;
 using Xamarin.Forms;
-using Plugin.Settings;
-using Plugin.Settings.Abstractions;
 
 namespace MPGuinoBlue
 {
-    
+
 
     public partial class App : Application
     {
@@ -13,13 +11,13 @@ namespace MPGuinoBlue
         {
             InitializeComponent();
 
-           
 
-        MainPage = new NavigationPage(new MainPage())
-        {
-            BarBackgroundColor = Color.Black,
-            BarTextColor = Color.White
-        };
+
+            MainPage = new NavigationPage(new MainPage())
+            {
+                BarBackgroundColor = Color.Black,
+                BarTextColor = Color.White
+            };
         }
 
         protected override void OnStart()

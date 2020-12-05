@@ -1,0 +1,101 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:views="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+             x:Class="MPGuinoBlue.Views.TripPage"
+             Title="MPGuino Bluetooth Trip Data"
+             BackgroundColor="#202020"
+             
+             >
+    <ContentPage.Content>
+        <RelativeLayout>
+        
+
+                <Grid  RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+
+                         RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}" >
+
+           
+
+                <views:SKCanvasView PaintSurface="OnPainting" />
+                
+            </Grid>
+
+
+                <Grid VerticalOptions="End"
+                 RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToParent, Property=Width, Factor=1}"
+
+                         RelativeLayout.HeightConstraint="{ConstraintExpression Type=RelativeToParent, Property=Height, Factor=1}" Background="#202020">
+                
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+
+
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="16*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="11*"/>
+                        <ColumnDefinition Width="9*"/>
+                    </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="1" Text="{Binding Tdte,StringFormat='{0:#0.00}'}" Grid.ColumnSpan="2" VerticalTextAlignment="End" HorizontalTextAlignment="End" FontSize="33" TextColor="White"/>
+                <Label Grid.Row="0" Grid.Column="3" Text="{Binding distunit}" Grid.ColumnSpan="1" VerticalTextAlignment="End"  FontSize="20" TextColor="White"/>
+                <Label Grid.Row="0" Grid.Column="0" Text="Distance To Empty" FontSize="17" VerticalTextAlignment="End" HorizontalTextAlignment="Right" TextColor="White" />
+
+                <Label Grid.Row="1" Grid.Column="1" Text="{Binding Tspeed,StringFormat='{0:#0.00}'}" VerticalTextAlignment="End" Grid.ColumnSpan="2"  HorizontalTextAlignment="End" FontSize="33" TextColor="White"/>
+                <Label Grid.Row="1" Grid.Column="3" Text="{Binding speedunit}" VerticalTextAlignment="End" FontSize="20" TextColor="White"/>
+                <Label Grid.Row="1" Grid.Column="0" Text="Speed" FontSize="20" VerticalTextAlignment="End" HorizontalTextAlignment="Right" TextColor="White"/>
+
+                <Label Grid.Row="2" Grid.Column="1" Text="{Binding Ttrip100,StringFormat='{0:#0.00}'}" Grid.ColumnSpan="2" VerticalTextAlignment="End"  HorizontalTextAlignment="End" FontSize="33"  TextColor="white"/>
+                <Label Grid.Row="2" Grid.Column="3" Text="{Binding econunit}" Grid.ColumnSpan="1" VerticalTextAlignment="End"  FontSize="17" TextColor="White"/>
+                <Label Grid.Row="2" Grid.Column="0" Text="Trip Economy" FontSize="20" VerticalTextAlignment="End" HorizontalTextAlignment="Right"  TextColor="White"/>
+
+                <Label Grid.Row="3" Grid.Column="1" Text="{Binding Ttripfuel,StringFormat='{0:#0.00}'}" Grid.ColumnSpan="2" VerticalTextAlignment="End"  HorizontalTextAlignment="End" FontSize="33" TextColor="White" />
+                <Label Grid.Row="3" Grid.Column="3" Text="{Binding fuelunit}" Grid.ColumnSpan="1" VerticalTextAlignment="End"  FontSize="20" TextColor="White"/>
+                <Label Grid.Row="3" Grid.Column="0" Text="Trip Fuel Used" FontSize="18" VerticalTextAlignment="End" HorizontalTextAlignment="Right"  TextColor="White"/>
+                <Label Grid.Row="4" Grid.Column="1" Text="{Binding Ttripodo,StringFormat='{0:#0.00}'}" Grid.ColumnSpan="2" VerticalTextAlignment="End"  HorizontalTextAlignment="End" FontSize="33"  TextColor="White"/>
+                <Label Grid.Row="4" Grid.Column="3" Text="{Binding distunit}" Grid.ColumnSpan="1" VerticalTextAlignment="End"  FontSize="20" TextColor="White"/>
+                <Label Grid.Row="4" Grid.Column="0" Text="Trip ODO" FontSize="20" VerticalTextAlignment="End" HorizontalTextAlignment="Right"  TextColor="White"/>
+                <Label Grid.Row="5" Grid.Column="1" Text="{Binding Tinstant,StringFormat='{0:#0.00}'}" Grid.ColumnSpan="2" VerticalTextAlignment="End"  HorizontalTextAlignment="End" FontSize="33"  TextColor="White"/>
+                <Label Grid.Row="5" Grid.Column="3" Text="{Binding speed}" Grid.ColumnSpan="1" VerticalTextAlignment="End"  FontSize="17" TextColor="White"/>
+                <Label Grid.Row="5" Grid.Column="0" Text="Instant" FontSize="20" VerticalTextAlignment="End" HorizontalTextAlignment="Right"  TextColor="White"/>
+
+
+
+                <Button
+                Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="2" Text="Settings"
+                    IsEnabled="{Binding IsReadyToPrint}"
+                    Margin="3,0,10,8"
+                    BackgroundColor="LightGray"
+                    Command="{Binding SettingCommand}"/>
+            <Button Grid.Row="6" Text="Reset Trip"
+                    Grid.ColumnSpan="2" IsEnabled="{Binding IsReadyToPrint}"
+                    Margin="10,6,3,2"
+                    BackgroundColor="LightGray"
+                    Command="{Binding TripCommand}"/>
+            <Button 
+                Grid.Row="6" Grid.Column="2" Text="Refill Tank"
+                     Grid.ColumnSpan="2" IsEnabled="{Binding IsReadyToPrint}"
+                    Margin="3,6,10,2"
+                    BackgroundColor="LightGray"
+                    Command="{Binding TankCommand}"/>
+            <Button Grid.Row="7"
+                Text="Back"
+                    IsEnabled="{Binding IsReadyToPrint}"
+                    Margin="10,0,3,8"
+                     Grid.ColumnSpan="2" BackgroundColor="LightGray"
+                    Command="{Binding Disconnect}"/>
+
+            </Grid>
+
+        </RelativeLayout>
+    </ContentPage.Content>
+</ContentPage>

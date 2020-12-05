@@ -1,18 +1,18 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Xamarin.Forms;
-using Shiny.BluetoothLE.Central;
-using Shiny;
-using Xamarin.Essentials;
-using System.Reactive.Linq;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using MPGuinoBlue.ViewModels;
 using MPGuinoBlue.Views;
-using System.Linq;
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
-using MPGuinoBlue.ViewModels;
+using Shiny;
+using Shiny.BluetoothLE.Central;
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace MPGuinoBlue.ViewModels
 {
@@ -133,13 +133,13 @@ namespace MPGuinoBlue.ViewModels
               Peripherals.Add(item);
 
           if (item.Name == savecharac && saveflag == true) //saveflagshow
-                     {
+          {
               automatic = true;
               OnSelectedPeripheral(item);
               Device.BeginInvokeOnMainThread(async () =>
                          {
-                                 //await App.Current.MainPage.DisplayAlert("List Auto", item.Name, "Ok");
-                             });
+                             DeviceDisplay.KeepScreenOn = true; //await App.Current.MainPage.DisplayAlert("List Auto", item.Name, "Ok");
+                         });
           }
 
       });
@@ -158,19 +158,19 @@ namespace MPGuinoBlue.ViewModels
 
         void OnSelectedPeripheral(IPeripheral peripheral)
         {
-            if (scanflag == false || automatic==false )
+            if (scanflag == false || automatic == false)
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    string action = await App.Current.MainPage.DisplayActionSheet("Choose a view", "Cancel", null, "All Parameters", "Trip View");
-                     
+                    string action = await App.Current.MainPage.DisplayActionSheet("Choose a view", "Cancel", null, "All Parameters", "Trip View", "Tank View");
+
                     if (action == "All Parameters")
                     {
                         Device.BeginInvokeOnMainThread(async () =>
                     {
-                        DeviceDisplay.KeepScreenOn = !DeviceDisplay.KeepScreenOn;
+                        DeviceDisplay.KeepScreenOn = true;
 
-                        await App.Current.MainPage.Navigation.PushAsync(new PrintPage(peripheral));
+                        await App.Current.MainPage.Navigation.PushAsync(new InfoPage(peripheral));
                         AppSettings.AddOrUpdateValue(nameof(savepage), action);
                         AppSettings.AddOrUpdateValue(nameof(savecharac), peripheral.Name);
 
@@ -181,8 +181,21 @@ namespace MPGuinoBlue.ViewModels
                     {
                         Device.BeginInvokeOnMainThread(async () =>
                         {
-                            DeviceDisplay.KeepScreenOn = !DeviceDisplay.KeepScreenOn;
-                            await App.Current.MainPage.Navigation.PushAsync(new Print1Page(peripheral));
+                            //pp DeviceDisplay.KeepScreenOn = !DeviceDisplay.KeepScreenOn;
+                            DeviceDisplay.KeepScreenOn = true;
+                            await App.Current.MainPage.Navigation.PushAsync(new TripPage(peripheral));
+                            AppSettings.AddOrUpdateValue(nameof(savepage), action);
+                            AppSettings.AddOrUpdateValue(nameof(savecharac), peripheral.Name);
+
+                            SelectedPeripheral = null;
+                        });
+                    }
+                    if (action == "Tank View")
+                    {
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            DeviceDisplay.KeepScreenOn = true;
+                            await App.Current.MainPage.Navigation.PushAsync(new TankPage(peripheral));
                             AppSettings.AddOrUpdateValue(nameof(savepage), action);
                             AppSettings.AddOrUpdateValue(nameof(savecharac), peripheral.Name);
 
@@ -196,19 +209,19 @@ namespace MPGuinoBlue.ViewModels
 
                 });
             }
-            if (scanflag==true && automatic == true)
+            if (scanflag == true && automatic == true)
             {
-                if (savepage== "All Parameters")
+                if (savepage == "All Parameters")
                 {
-                    
+
                     Device.BeginInvokeOnMainThread(async () =>
                     {
-                        DeviceDisplay.KeepScreenOn = !DeviceDisplay.KeepScreenOn;
+                        DeviceDisplay.KeepScreenOn = true;
 
-                        await App.Current.MainPage.Navigation.PushAsync(new PrintPage(peripheral));
-                        
+                        await App.Current.MainPage.Navigation.PushAsync(new InfoPage(peripheral));
+
                         AppSettings.AddOrUpdateValue(nameof(savecharac), peripheral.Name);
-                                        automatic = false;
+                        automatic = false;
 
                         SelectedPeripheral = null;
                     });
@@ -218,9 +231,24 @@ namespace MPGuinoBlue.ViewModels
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
-                        DeviceDisplay.KeepScreenOn = !DeviceDisplay.KeepScreenOn;
+                        DeviceDisplay.KeepScreenOn = true;
 
-                        await App.Current.MainPage.Navigation.PushAsync(new Print1Page(peripheral));
+                        await App.Current.MainPage.Navigation.PushAsync(new TripPage(peripheral));
+
+                        AppSettings.AddOrUpdateValue(nameof(savecharac), peripheral.Name);
+                        automatic = false;
+
+                        SelectedPeripheral = null;
+                    });
+
+                }
+                if (savepage == "Tank View")
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        DeviceDisplay.KeepScreenOn = true;
+
+                        await App.Current.MainPage.Navigation.PushAsync(new TankPage(peripheral));
 
                         AppSettings.AddOrUpdateValue(nameof(savecharac), peripheral.Name);
                         automatic = false;
@@ -231,10 +259,9 @@ namespace MPGuinoBlue.ViewModels
                 }
 
 
-
             }
         }
-       
+
 
         void GetDeviceList()
         {
@@ -242,24 +269,25 @@ namespace MPGuinoBlue.ViewModels
             {
                 _scanDisposable?.Dispose();
             }
-            else{
+            else
+            {
                 if (_centralManager.Status == Shiny.AccessState.Available && !_centralManager.IsScanning)
                 {
                     _scanDisposable = _centralManager.ScanForUniquePeripherals().Subscribe(scanResult =>
                     {
-                        if(!string.IsNullOrEmpty(scanResult.Name)&& !Peripherals.Contains(scanResult))
-                           Peripherals.Add(scanResult);
-                        
-                            if (scanResult.Name == savecharac && saveflag == true) //saveflagshow
+                        if (!string.IsNullOrEmpty(scanResult.Name) && !Peripherals.Contains(scanResult))
+                            Peripherals.Add(scanResult);
+
+                        if (scanResult.Name == savecharac && saveflag == true) //saveflagshow
+                        {
+                            OnSelectedPeripheral(scanResult);
+                            Device.BeginInvokeOnMainThread(async () =>
                             {
-                                OnSelectedPeripheral(scanResult);
-                                Device.BeginInvokeOnMainThread(async () =>
-                                {
                                     //await App.Current.MainPage.DisplayAlert("Scan Auto", scanResult.Name, "Ok");
                                 });
-                            }
-                        
-                        
+                        }
+
+
 
                     });
                 }
